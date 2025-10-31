@@ -1,0 +1,64 @@
+// server.js
+
+require('dotenv').config();
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const cors = require('cors'); // Required to allow frontend to access backend
+
+const app = express();
+const PORT = 3000;
+const uri = process.env.MONGO_URI;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+let db; // Variable to hold the database connection
+
+async function connectToMongo() {
+    try {
+        const client = new MongoClient(uri);
+        await client.connect();
+        console.log("Successfully connected to MongoDB.");
+        db = client.db('ProductDB'); // Use your database name here
+        
+        // Optionally insert initial data if the collection is empty
+        await initializeProducts(db);
+        
+        // Start the server only after successful DB connection
+        app.listen(PORT, () => {
+            console.log(`Server running on http://localhost:${PORT}`);
+        });
+
+    } catch (error) {
+        console.error("MongoDB connection failed:", error);
+        process.exit(1); // Exit process with failure
+    }
+}
+
+// Function to ensure some data exists for the demo
+async function initializeProducts(database) {
+    const count = await database.collection('products').countDocuments();
+    if (count === 0) {
+        console.log("Inserting sample products...");
+        await database.collection('products').insertMany([
+            { name: "Wireless Headphones", price: 149.99, description: "Noise-canceling over-ear headphones.", image: "https://via.placeholder.com/300/1e90ff/ffffff?text=Headphones" },
+            { name: "Smart Watch V2", price: 299.00, description: "Track your fitness and receive notifications.", image: "https://via.placeholder.com/300/ff4500/ffffff?text=Smart+Watch" },
+            { name: "Travel Backpack", price: 75.50, description: "Durable and spacious for weekend trips.", image: "https://via.placeholder.com/300/3cb371/ffffff?text=Backpack" }
+        ]);
+        console.log("Sample products inserted.");
+    }
+}
+
+// 🚀 API Endpoint to Get All Products
+app.get('/api/products', async (req, res) => {
+    try {
+        const products = await db.collection('products').find({}).toArray();
+        res.status(200).json(products);
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).json({ message: 'Failed to retrieve products.' });
+    }
+});
+
+connectToMongo();

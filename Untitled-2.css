@@ -1,0 +1,103 @@
+/* --- Base Styles --- */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0; /* Remove default margin */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light grey background */
+    color: #343a40; /* Dark text color */
+}
+
+h1 {
+    text-align: center;
+    color: #007bff; /* Primary blue color */
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+#loading-message {
+    text-align: center;
+    color: #6c757d;
+    font-size: 1.2em;
+    grid-column: 1 / -1; /* Center across all columns in the grid */
+}
+
+/* --- Catalog Grid Layout --- */
+#catalog {
+    display: grid;
+    /* Responsive grid: auto-fill columns, minimum size 280px */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px; /* Spacing between cards */
+    max-width: 1200px;
+    margin: 0 auto; /* Center the entire catalog container */
+    padding: 10px;
+}
+
+/* --- Product Card Styling --- */
+.product-card {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Ensures image corners match card corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: translateY(-8px); /* Subtle lift effect on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+/* --- Image Styling --- */
+.product-card img {
+    width: 100%;
+    height: 220px; /* Fixed height for consistent card size */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    display: block;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* --- Text/Info Styling --- */
+.product-info {
+    padding: 15px;
+    text-align: left; /* Align text to the left within the card */
+}
+
+.product-info h2 {
+    font-size: 1.2em;
+    margin: 0 0 5px 0;
+    color: #007bff; /* Highlight name in blue */
+    white-space: nowrap; /* Prevent title wrap */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Use ellipsis for long titles */
+}
+
+.product-info p {
+    font-size: 0.9em;
+    color: #6c757d; /* Muted color for description */
+    margin-bottom: 15px;
+    height: 3em; /* Fixed height for 2 lines of description */
+    overflow: hidden;
+}
+
+/* --- Price Styling --- */
+.product-info .price {
+    font-size: 1.8em;
+    color: #28a745; /* Prominent green for price */
+    font-weight: 700; /* Bold price */
+    display: block;
+    text-align: right; /* Price aligned to the right */
+    padding-top: 10px;
+    border-top: 1px solid #f8f9fa; /* Separator line above price */
+}
+
+/* --- Responsive Adjustments (optional but recommended) --- */
+@media (max-width: 600px) {
+    #catalog {
+        /* On small screens, switch to a single column layout */
+        grid-template-columns: 1fr;
+    }
+    .product-card {
+        margin: 0 10px;
+    }
+}
